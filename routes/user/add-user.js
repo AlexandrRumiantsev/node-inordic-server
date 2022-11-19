@@ -32,32 +32,10 @@ module.exports = (app, connect) => {
             'PASSWORD': req.body.PASSWORD,
             'ROLE': req.body.ROLE,
         }
-
+        //Инициализируем объект класса WorkerTableUser, при этом передаем в конструктор 
         const workerTableUser = new WorkerTableUser(res, req)
+        //Добавляем пользователя, через воркер
         workerTableUser.add(data)
-        /*
-        const id = uuid.v4();
-        const name = req.body.NAME;
-        const surname = req.body.SURNAME;
-        const email = req.body.EMAIL;
-        const img = req.body.IMG;
-        const phone = req.body.PHONE;
-        const login = req.body.LOGIN;
-        const password = req.body.PASSWORD;
-        const role = req.body.ROLE;
-
-        //Сгенерировать запрос для добавления пользователей в БД
-        const sql = 'INSERT INTO `users` (`ID`, `NAME`, `SURNAME`, `IMG`, `EMAIL`, `PHONE`, `LOGIN`, `PASSWORD`, `ROLE` ) VALUES ("'+ id +'", "'+ name +'", "'+ surname +'", "'+ img +'", "'+ email +'", "' + phone + '", "' + login + '", "' + password + '", "' + role + '")';
-        
-        //Стандартная конструкция для отправки запроса в базу
-        connect.query(sql, (err, result) => {
-            //добавляем сообщение, при успешном взаимодействии с БД
-            result.message = 'Пользователь успешно добавлен в БД'
-            err ? res.send(err) : res.send(JSON.stringify(result))
-        })
-        */
-
-
      })
 
     /**
