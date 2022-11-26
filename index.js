@@ -1,14 +1,11 @@
 //Документация NODE
 //https://nodejs.org/dist/latest-v16.x/docs/api/synopsis.html#example
-
 //Импортируем плагины
 const express = require("express");
-
-const WorkerFiles = require("./services/worker-files/index")
-
+//Модуль для работы с файловой системой
+const fs = require("fs");
 //Инициализируем приложение express
 const app = express();
-
 //1 - Корневой маршрут
 //Первый базовый маршрут приложения
 app.get(
@@ -56,24 +53,17 @@ app.get(
         )
     }
 )
-
 //Распределяем роутеры по файлам
-
-//Роуты для товаров
-require('./routes/good/get-all-good.js')(app)
-require('./routes/good/get-item.js')(app)
-require('./routes/good/del-item.js')(app)
-require('./routes/good/add-item.js')(app)
-require('./routes/good/edit-item.js')(app)
-
-//Роуты для пользовтелей
-require('./routes/user/add-user')(app)
-require('./routes/user/get-all-users')(app)
-require('./routes/user/get-user')(app)
-require('./routes/user/edit-user')(app)
-
-//Роуты для отправки писем
-require('./routes/mail')(app)
-
+const NAME_FOLDER_ROUTES = 'routes'
+//Получаем массив с названиями папок внутри папки routes
+const folderFromRoutes = fs.readdirSync(`./${NAME_FOLDER_ROUTES}`);
+folderFromRoutes.map(folderName => {
+    //получаем папки, внутри папок в папке routes
+    const folderFromInRoutes = fs.readdirSync(`./${NAME_FOLDER_ROUTES}/${folderName}`);
+    folderFromInRoutes.map(fileName => {
+        //импортируем все роуты из всех папок
+        require(`./${NAME_FOLDER_ROUTES}/${folderName}/${fileName}`)(app)
+    })
+})
 //Начинаем прослушивать определенный порт
 app.listen(3000);
