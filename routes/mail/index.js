@@ -3,8 +3,8 @@ const multer = require('multer')
 const uploadFromForm = multer({dest: 'uploads/'})
 //Устанавливаем название файла на форме
 const fileFromForm = uploadFromForm.single('MYFILE')
-//импортируем плагин
-const nodemailer = require('nodemailer')
+//импортируем воркер для работы с почтой
+const WorkerForMail = require('../../services/worker-for-mail/index')
  
 module.exports = (app)=> {
     /**
@@ -17,34 +17,10 @@ module.exports = (app)=> {
     app.post('/mail/send', fileFromForm, function(req, res){
         //Сообщение, которое мы передали с формы
         const messageToManager = req.body.TEXT;
-        //Создали объект через функцию createTransport, который содержит настройки 
-        let transporter = nodemailer.createTransport({
-            host: 'smtp.yandex.ru', // хостинг почты яндекса
-            port: 465, // порт почты
-            secure: 465, // Эта конфигурация откроет соединение с сервером TLS с самозаверяющим или недействительным сертификатом TLS.
-            auth: {
-                user: "inordic2022", 
-                pass: "inordic" 
-            }
-        });
-        //Создадим объект с опциями для письма
-        let mailOptions = {
-            from: '"inordic" <inordic2022@yandex.ru', // sender address
-            to: 'r-sasha@list.ru', // тут указываем адресс менеджера
-            subject: 'Письмо от магазина InordicShoop', // Subject line
-            html: messageToManager // html body
-        };
-
-        //Отправляем письмо
-        transporter.sendMail(mailOptions, (error, info) => {
-            //обрабатываем ошибку, если она возникла
-            if (error) {
-                res.send(error);
-            }
-            res.send('Message %s sent: %s', info.messageId, info.response);
-        });
-
-
+        //Создадим экземпляр класс, передадим в конструктор для установки внутри воркера res req, как в других воркерах
+        const workerForMail = new WorkerForMail(res, req)
+        // Применим функию send, для отправки письма, передаем в него сообщение с формы
+        workerForMail.sendMail(messageToManager)
     })
 
     /**

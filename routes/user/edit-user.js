@@ -7,7 +7,7 @@ const fileFromForm = uploadFromForm.single('MYFILE')
 
 const WorkerTableUser = require('../../services/worker-tables/users')
 
-module.exports = (app, connect) => {
+module.exports = (app) => {
 
     /**
      * Маршрут для добавления оного пользователя:

@@ -3,25 +3,9 @@
 
 //Импортируем плагины
 const express = require("express");
-const mysql = require("mysql")
 
-//создадим подключение к базе данных
-// 1 - Создадим функцию-конфигурацию для подключения
-function config () {
-    return {
-      host: "94.228.126.172",
-      port: 3306,
-      user: "inordic_sch_usr",
-      password: "VANCfzNsov9GDt1M",
-      database: "inordic_school",
-      connectionLimit : 1000,
-      connectTimeout  : 60 * 60 * 1000,
-      acquireTimeout  : 60 * 60 * 1000,
-      timeout         : 60 * 60 * 1000
-    }
-}
-// 2 - Создадим подключение
-const connect = mysql.createPool(config())
+const WorkerFiles = require("./services/worker-files/index")
+
 //Инициализируем приложение express
 const app = express();
 
@@ -30,10 +14,7 @@ const app = express();
 app.get(
     '/',
     function(request, response){
-        //Посылаем ответ от сервера
-        ///console.log(request.query.test)
-        //Декомпозиция объекта
-        const {test, name} = request.query
+
         response.send(
             `
                 <h1>
@@ -79,15 +60,15 @@ app.get(
 //Распределяем роутеры по файлам
 
 //Роуты для товаров
-require('./routes/good/get-all-good.js')(app, connect)
-require('./routes/good/get-item.js')(app, connect)
-require('./routes/good/del-item.js')(app, connect)
-require('./routes/good/add-item.js')(app, connect)
-require('./routes/good/edit-item.js')(app, connect)
+require('./routes/good/get-all-good.js')(app)
+require('./routes/good/get-item.js')(app)
+require('./routes/good/del-item.js')(app)
+require('./routes/good/add-item.js')(app)
+require('./routes/good/edit-item.js')(app)
 
 //Роуты для пользовтелей
-require('./routes/user/add-user')(app, connect)
-require('./routes/user/get-all-users')(app, connect)
+require('./routes/user/add-user')(app)
+require('./routes/user/get-all-users')(app)
 require('./routes/user/get-user')(app)
 require('./routes/user/edit-user')(app)
 
