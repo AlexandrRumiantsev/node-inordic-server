@@ -9,7 +9,6 @@ const uuid = require("uuid")
 const WorkerTableUser = require('../../services/worker-tables/users')
 
 module.exports = (app) => {
-
     /**
      * Маршрут для добавления оного пользователя:
      * Автор: Румянцев Александр

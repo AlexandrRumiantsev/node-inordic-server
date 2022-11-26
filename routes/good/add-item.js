@@ -1,5 +1,4 @@
 const WorkerTableGood = require('../../services/worker-tables/goods')
-
 //Добавляем плагин multer, для работы с формами и файлами в node.js
 const multer = require('multer')
 //Настраивае, куда будем сохранять файл
@@ -28,11 +27,9 @@ module.exports = (app) => {
             "PRICE": req.body.PRICE,
             "IMG": req.body.IMG,
             "COUNT": req.body.COUNT,
-        }
-                
+        }          
         const workerTableGood = new WorkerTableGood(res, req);
         workerTableGood.add(data)
-
     })
 
     /**

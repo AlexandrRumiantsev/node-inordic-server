@@ -146,7 +146,6 @@ module.exports = class WorkerDataBase{
         //Если ID будет передан, такой, которого нету в БД, запрос сработает как INSERT
         sql += ` WHERE ID='${data.ID}'`
         //Отправляем SQL Запрос
-        //this.response.send(sql);
         this.query(sql)
     }
 }

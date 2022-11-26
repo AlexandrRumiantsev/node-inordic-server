@@ -15,8 +15,7 @@ module.exports = (app) => {
      * Метод: POST
      * Пример работы с запросом:
     */
-    app.post('/goods/edit', fileFromForm, function(req, res){
-        
+    app.post('/goods/edit', fileFromForm, function(req, res){  
         const data = {
             'ID': req.body.ID,
             'TITLE': req.body.TITLE,
@@ -25,11 +24,8 @@ module.exports = (app) => {
             'IMG': req.body.IMG,
             'COUNT': req.body.COUNT
         }
-
         const workerTableGood = new WorkerTableGood(req, res);
         workerTableGood.update(data)
-        
-
     })
     /**
      * Маршрут для редактирования оного товара:
