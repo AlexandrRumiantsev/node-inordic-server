@@ -8,6 +8,12 @@ const fs = require("fs");
 const app = express();
 //1 - Корневой маршрут
 //Первый базовый маршрут приложения
+
+
+//cors, для разблокировки запросов к АПИ
+const cors = require('cors')
+app.use(cors())
+
 app.get(
     '/',
     function(request, response){
@@ -83,11 +89,13 @@ const NAME_FOLDER_ROUTES = 'routes'
 const folderFromRoutes = fs.readdirSync(`./${NAME_FOLDER_ROUTES}`);
 folderFromRoutes.map(folderName => {
     //получаем папки, внутри папок в папке routes
-    const folderFromInRoutes = fs.readdirSync(`./${NAME_FOLDER_ROUTES}/${folderName}`);
-    folderFromInRoutes.map(fileName => {
-        //импортируем все роуты из всех папок
-        require(`./${NAME_FOLDER_ROUTES}/${folderName}/${fileName}`)(app)
-    })
+    if(folderName !== '.DS_Store'){
+        const folderFromInRoutes = fs.readdirSync(`./${NAME_FOLDER_ROUTES}/${folderName}`);
+        folderFromInRoutes.map(fileName => {
+            //импортируем все роуты из всех папок
+            require(`./${NAME_FOLDER_ROUTES}/${folderName}/${fileName}`)(app)
+        })
+    }
 })
 //Начинаем прослушивать определенный порт
 app.listen(3000);
